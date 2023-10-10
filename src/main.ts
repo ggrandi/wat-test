@@ -1,11 +1,30 @@
 import init from "./index.wat?init";
 
+// set up the canvas
 const canvas = document.querySelector("canvas")!;
 
 const ctx = canvas.getContext("2d")!;
 
-const res = await init({
+// initialize the webassembly module
+const wasm = await init({
+  // these are the required imports
   imports: {
+    store(name, arg) {
+      // since localStorage stores string keys and string values, the i64s have to be converted to strings first
+      localStorage.setItem(name.toString(), arg.toString());
+    },
+    load(name) {
+      // since the localStorage had a string, the value must first be retrieved then converted into a bigint to be used as an i64
+      return BigInt(
+        localStorage.getItem(name.toString()) ??
+          // using 0 as a default if the value couldn't be found
+          0,
+      );
+    },
+    setRGBFill(color) {
+      // sets the color of the shape to be the hexcode corresponding to the color
+      ctx.fillStyle = "#" + (color & 0xffffff).toString(16).padStart(6, "0");
+    },
     fillRect: ctx.fillRect.bind(ctx),
     clearRect: ctx.clearRect.bind(ctx),
     resizeCanvas(width, height) {
@@ -15,13 +34,23 @@ const res = await init({
   },
 });
 
-console.log(res);
+// call the initializer
+wasm.exports.init();
 
-res.exports.init();
+function nextTick() {
+  // call the webassembly tick function
+  wasm.exports.tick();
 
-function mainLoop() {
-  res.exports.tick();
-  requestAnimationFrame(mainLoop);
+  // schedule the next tick
+  requestAnimationFrame(nextTick);
 }
 
-requestAnimationFrame(mainLoop);
+// schedule the next tick
+requestAnimationFrame(nextTick);
+
+// --- testing the storage functions ---
+
+// verify that the storing and loading works
+wasm.exports.storeValue();
+
+console.log(wasm.exports.loadValue());
