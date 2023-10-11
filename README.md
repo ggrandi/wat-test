@@ -1,6 +1,6 @@
 # WAT rendering test
 
-This is a simple test to use [wat (webassembly text)](https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format#see_also) to draw to an html canvas using the [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) api.
+This is a simple test to use [wat (webassembly text)](https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format) to draw to an html canvas using the [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) api.
 
 ## Steps to run locally
 
