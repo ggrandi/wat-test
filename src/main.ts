@@ -9,6 +9,7 @@ const ctx = canvas.getContext("2d")!;
 const wasm = await init({
   // these are the required imports
   imports: {
+		log: console.log,
     store(name, arg) {
       // since localStorage stores string keys and string values, the i64s have to be converted to strings first
       localStorage.setItem(name.toString(), arg.toString());
@@ -36,6 +37,13 @@ const wasm = await init({
 
 // call the initializer
 wasm.exports.init();
+
+window.addEventListener("keypress", (ev) => {
+	// if the key is a single letter (don't handle modifier keys)
+	if (ev.key.length === 1)
+		// pass it to listener
+		wasm.exports.keyboardHandler(ev.key.charCodeAt(0))
+})
 
 function nextTick() {
   // call the webassembly tick function

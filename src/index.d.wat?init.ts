@@ -5,6 +5,7 @@ declare global {
 
 declare const init: (options?: {
   imports: {
+		log: (arg: unknown) => void;
     store: (name: i64, arg: i64) => void;
     load: (name: i64) => i64;
     setRGBFill: (color: i32) => void;
@@ -16,6 +17,7 @@ declare const init: (options?: {
   exports: {
     init: () => void;
     tick: () => void;
+		keyboardHandler: (keyCode: i32) => void;
     storeValue: () => void;
     loadValue: () => i64;
   };

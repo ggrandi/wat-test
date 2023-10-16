@@ -24,6 +24,10 @@
 	;; setRGBFill(0xAABBCC) sets the fill style to `#AABBCC`
 	;;	**ands with 0x00ffffff before setting the value**
 	(import "imports" "setRGBFill" (func $setRGBFill (param i32)))
+	
+	;; log(value: i32) -> void
+	;;	 logs the `value` to the web console
+	(import "imports" "log" (func $log (param i32)))
 
 
 	;; declaring constants that live for the scope of the program
@@ -43,6 +47,13 @@
 		global.get $HEIGHT
 		call $resizeCanvas
 	)	
+	
+	;; keyboard handler
+	;; gets called after a key is pressed and released
+	;; @param $keycode the ascii character code of the pressed key
+	(func (export "keyboardHandler") (param $keyCode i32)
+		(call $log (local.get $keyCode))	
+	)
 	
 	;; tick function that gets called by the binding code when the browser is ready for the next animation frame
 	(func (export "tick")
